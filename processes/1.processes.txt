@@ -1,6 +1,10 @@
 
 --- About process ---
 
+Process is a set of instructions from CPU perspective. Set of instructions is a bunch of assembly (machine) code.
+It has an isolated location in memory. Process get scheduled in the CPU for execution.
+
+
 Process is the abstraction of running program. Abstraction is needed to:
     * run multiple processes in 1 CPU at a time 
     * provide programmers to work with OS in a better communicative way.
