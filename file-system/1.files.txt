@@ -1,10 +1,12 @@
-Os supports 2 part file names, with them being separated by a period: program.txt. The part after period is called file extension and indicates something about the file
+Os supports 2 part file names, with them being separated by a period: program.txt.
+The part after period is called file extension and indicates something about the file
 
-In UNIX systems file extensions are just conventions and are not enforced by the OS. File named something.txt might be some kind of text file, but that name is more to remind the owner than to convey any actual information
+In UNIX systems, file extensions are just conventions and are not enforced by the OS.
+File named something.txt might be some kind of text file, but that name is more to remind the owner than to convey any actual information
 
-Common file structure is unstructured sequence of bytes. OS just sees bytes, any meaning must be imposed by user-level programs. This provides maximum amount of flexiblity
+Common file structure is an unstructured sequence of bytes. OS just sees bytes, any meaning must be imposed by user-level programs. This provides maximum amount of flexibility
 
-Many operation systems support several types of files:
+Many operating systems support several types of files:
 * regular - contain user information
 * directories - system files for maintaining the structure of file system
 * character special - related to I/O and used to model serial I/O devices, such as terminals, printers, and networks
@@ -14,12 +16,12 @@ Regular files are generally either ASCII or binary files
 ASCII files great for displaying and printed as it is, and they can be edited with any text editor
 Binary files are not readable or printable. Usually, they have some internal structure known to programs that use them
 
-Early operating systems provided one kind of file access - sequental access, process should read file in order, starting at beginning
+Early operating systems provided one kind of file access - sequential access, the process should read a file in order, starting at the beginning
 
 Files whose bytes or records can be read in any order are called random-access files.
 2 methods can be used for specifying where to start reading:
 * first one, every read operation gives the position in the file to start reading at
-* second one, a special operation seek is provided to set the current position. After seek, file can be read sequentially from the now-current position
+* second one, a special operation seek is provided to set the current position. After seeking, a file can be read sequentially from the now-current position
 
 Every file in addition to its name and data have other information called attributes or metadata:
 * protection - who can access the file and in what way

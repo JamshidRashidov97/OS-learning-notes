@@ -1,8 +1,8 @@
 
 Main memory (RAM) is an important resource that must be very carefully managed.
-"Memory hiererchy" is concept that computers have:
+"Memory hierarchy" is concept that computers have:
     * a few megabytes of very fast, expensive, volatile cache memory
-    * a few gigabytes of of medium-speed, medium-priced, volatilve main memory
+    * a few gigabytes of of medium-speed, medium-priced, volatile main memory
     * a few terabytes of slow, cheap, nonvolatile magnetic or solid-state disk storage
     * removable storage, such as DVDs, and USB sticks
 

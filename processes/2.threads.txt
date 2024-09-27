@@ -6,20 +6,18 @@ There is no dedicated memory location for thread.
 It also has set of instructions but it shares the memory with its parent process.
 
 
-The main reason for having threads is that in many appplications multiple activities are going on at once. Some of these may block from time to time. By decomposing such application into  multiple threads that run in quasi-paralles, programming becomes simpler. Threads share an address space and all of its data among themselves.
+The main reason for having threads is that in many applications multiple activities are going on at once. Some of these may block from time to time.
+By decomposing such application into  multiple threads that run in quasi-parallels, programming becomes simpler. Threads share an address space and all of its data among themselves.
 The second reason for having threads is that they are lighter weight than processes, and because of it they are easier to create and destroy.
-The third reason for having threads is also a performance argument. We cannot benefit from threads when all of them are CPU bound, but when there is substantial computing and also substantial I/O, having threads allows these activities to overlap, thus speeding up the application.
+The third reason for having threads is also a performance argument. We cannot benefit from threads when all of them are CPU bound,
+but when there is substantial computing and also substantial I/O, having threads allows these activities to overlap, thus speeding up the application.
 Finite-state machine - design in which each computation has a saved state, and there exists some set of events that can occur to change the state
 
-Model-charecteristics:
-Threads - Parallelism, blocking sysmte calls
+Model-characteristics:
+Threads - Parallelism, blocking system calls
 Single-threaded process - No parallelism, blocking system calls
 Finite-state machine - Parallelism, nonblocking system calls, interrupts
 
-
-
-
-[]
 
 
 
@@ -29,12 +27,12 @@ Finite-state machine - Parallelism, nonblocking system calls, interrupts
 --- Thread model ---
 
 Thread has:
-    * program counter - keeps track of which intruction to execute next
-    * registers - hold its current working varaibles
-    * stack - countains the execution history, with one frame for each procedure called but not yet returned from
+    * program counter - keeps track of which instruction to execute next
+    * registers - hold its current working variables
+    * stack - contains the execution history, with one frame for each procedure called but not yet returned from
 
 Process are used to group resources together. Threads are the entities scheduled for execution on the CPU.
-Threads hame same states as processes: running, blocked, ready
+Threads have same states as processes: running, blocked, ready
 All threads have exactly the same address space.
 
 Threads share:
@@ -63,31 +61,21 @@ Per-thread items:
 
 
 
-
-
-
-
-
-
-
 --- Implementing threads in User Space ---
 
 In this model we put threads package entirely in user space. The kernel knows nothing about them.
 The first advantage is that user-level threads package can be implemented on an operating system that does not support threads.
 Each process needs its own private thread table to keep track of the threads in that process. The thread table is managed by the run-time system.
-When a thread does something that may cause it to become blocked locally, it calls a run-time system procedure. This procedure checks if the thread must be put into blocked state, and if so, stores the thread's registers in the thread table, and starts another thread that is ready to run
+When a thread does something that may cause it to become blocked locally, it calls a run-time system procedure.
+This procedure checks if the thread must be put into blocked state, and if so, stores the thread's registers in the thread table, and starts another thread that is ready to run
 
-First problem of threads is how blocking system calls are implemented. Letting the thread actually make the system call is unaccaptable, since this will stop all the threads. And the problem of page faults are the same to user-level threads.
+First problem of threads is how blocking system calls are implemented. Letting the thread actually make the system call is unacceptable, since this will stop all the threads.
+And the problem of page faults are the same to user-level threads.
 Another problem is that if a thread starts running, no other thread in that process will ever run unless the first thread voluntarily gives up the CPU.
 
-And the most devastating argument against user-level threads is that programmers generally want threads precisely in applications where the threads block often, that these threads are constantly making system calls. Once user-level thread made system call, thread group's members are all blocked by system.
+And the most devastating argument against user-level threads is that programmers generally want threads precisely in applications where the threads block often, that these threads are constantly making system calls.
+Once user-level thread made system call, thread group's members are all blocked by system.
 For applications that are essentially entirely CPU bound and rarely block, what is the point of having threads at all?
-
-
-
-
-
-
 
 
 
@@ -101,21 +89,16 @@ For applications that are essentially entirely CPU bound and rarely block, what 
 
 --- Implementing threads in the Kernel ---
 
-In this model kernel has a thread table that keeps track of all the threads in system, and there is no need for run-time system to manage threads. Creating, removing operations is done via kernell call, and kernel does the creation or desctruction by updating the kernel thread table.
+In this model kernel has a thread table that keeps track of all the threads in system, and there is no need for run-time system to manage threads.
+Creating, removing operations is done via kernel call, and kernel does the creation or destruction by updating the kernel thread table.
 
-All calls that might block a thread are implemented as system calls, at considerably greator cost than a call to a run-time system procedure. When one thread is blocked, kernel can run another thread in same or any other processes. And programmers does not have to know about CPU switching from or to its thread, just like process
+All calls that might block a thread are implemented as system calls, at considerably greater cost than a call to a run-time system procedure. When one thread is blocked,
+kernel can run another thread in same or any other processes. And programmers does not have to know about CPU switching from or to its thread, just like process
 
-Due to the relatively greator cost of creating and destroying threads in the kernel, some systems take an environmentally correcto approach and recycle threads.
+Due to the relatively greater cost of creating and destroying threads in the kernel, some systems take an environmentally correct approach and recycle threads.
 
-First problem of kernel-level threads is what happens when a multithreaded process forks. The best choice depends on what the process is planning to do next.
+First problem of kernel-level threads is what happens when a multithreading process forks. The best choice depends on what the process is planning to do next.
 Another issue is signals, signals send to processes, not threads.
-
-
-
-
-
-
-
 
 
 
@@ -125,16 +108,11 @@ Another issue is signals, signals send to processes, not threads.
 
 --- Hybrid implementation ---
 
-In this model threads are implemented in both levels: kernel and user. For example, 2 threads are implemented in kernel-level, and in run-time system 2 threads created on top of each kernel-level thread, like tree. And we can configure however we want, say, 5 user-level threads on top of each kernel-level thread. This model gives ultimate flexibilty.
+In this model threads are implemented in both levels: kernel and user. For example, 2 threads are implemented in kernel-level, and in run-time system 2 threads created on top of each kernel-level thread, like tree.
+And we can configure however we want, say, 5 user-level threads on top of each kernel-level thread. This model gives ultimate flexibility.
 
-With this approach, the kernel is aware of only the kernel-level threads and schedule those. Each kernel-level thread has some set of user-level threads that take turns using it. And user-level threads are scheduled by run-time system.
-
-
-
-
-
-
-
+With this approach, the kernel is aware of only the kernel-level threads and schedule those. Each kernel-level thread has some set of user-level threads that take turns using it.
+And user-level threads are scheduled by run-time system.
 
 
 
@@ -146,14 +124,11 @@ With this approach, the kernel is aware of only the kernel-level threads and sch
 
 --- Scheduler Activations ---
 
-In this model, kernel assigns virtual processor for each thread. And when kernel knows that a thread has blocked, the kernel notifies the process' run-time system. This notification is called upcall. And run-time system can reschedule its threads, typically by marking the current thread as blocked and taking another thread from ready list, and starting it. Later, when the kernel learns that the original thread can run again, it notifies run-time system again. The run-time system can either restart blocked thread immedietly or put it on the ready list.
+In this model, kernel assigns virtual processor for each thread. And when kernel knows that a thread has blocked, the kernel notifies the process' run-time system.
+This notification is called upcall. And run-time system can reschedule its threads, typically by marking the current thread as blocked and taking another thread from ready list, and starting it.
+Later, when the kernel learns that the original thread can run again, it notifies run-time system again. The run-time system can either restart blocked thread immediately or put it on the ready list.
 
-Scheduler activates is the fundemental reliance on upcalls. Concept of upcalls violates the structure inherit in any layered system.
-
-
-
-
-
+Scheduler activates is the fundamental reliance on upcalls. Concept of upcalls violates the structure inherit in any layered system.
 
 
 
@@ -165,7 +140,9 @@ Scheduler activates is the fundemental reliance on upcalls. Concept of upcalls v
 
 --- Pop-up threads ---
 
-Pop-up thread is thread which creates for every arrival of message, to handle the message and process it. A key advantage of pip-up threads is that since they are brans new,  they do not have and history, registers, stack, whataver that must be restored. Each one starts out fresh, and this makes possible to create such a thread quickly.
+Pop-up thread is thread which creates for every arrival of message, to handle the message and process it.
+A key advantage of pip-up threads is that since they are brand new,  they do not have and history, registers, stack, whatever that must be restored.
+Each one starts out fresh, and this makes possible to create such a thread quickly.
 
 
 
@@ -173,19 +150,13 @@ Pop-up thread is thread which creates for every arrival of message, to handle th
 
 
 
+--- Making Single-threaded code Multithreading ---
 
-
-
-
-
-
---- Making Single-threaded code Multithreaded ---
-
-Concerting single-threaded code to multithreaded is going to couse many problems:
-* Global varaibles - each thread should have its own global variable, and process global variable that process's threads share
+Concerting single-threaded code to multithreading is going to cause many problems:
+* Global variables - each thread should have its own global variable, and process global variable that process's threads share
 * Library methods - many library procedures are not designed to have second call made to any given procedure while previous call has not been finished.
 * Signals - signals are mostly process specific. If kernel does not know about threads, it just sends to process itself.'
-* Stack management - if process' stack overflows, the kernel just provides that process with more stack. If all threads have multiple stakcs, and the kernel does not aware of them, the kernel even does not know whether stack overflowed on specific thread
+* Stack management - if process' stack overflows, the kernel just provides that process with more stack. If all threads have multiple stacks, and the kernel does not aware of them, the kernel even does not know whether stack overflowed on specific thread
 
 Possible solutions:
 * Global variables - creating methods to create, get, update global variables per thread. And using that methods to manage per-thread global variables
@@ -193,41 +164,5 @@ Possible solutions:
 * Signals - using signal registers
 * Stack management - does not have solution
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
