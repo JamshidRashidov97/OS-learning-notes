@@ -10,12 +10,15 @@ NGINX and Postgres is the example of Multi-Process. Multi-process means each pro
 NodeJS is the example for Single Threaded Process.
 
 
+
+Fork is an operation where a process creates a copy of itself.
 Copy-on-Write (CoW) in Redis is a memory optimization technique used during operations like forking (e.g., when Redis creates a snapshot for persistence using RDB files).
 Here's a simple way to understand it:
 When Redis forks a process to create a backup, it doesn't copy all the data immediately.
 Instead, both the original and the new process share the same memory pages.
 If the data in memory changes during this time, Redis makes a copy of the changed part and keeps the original unchanged for the snapshot process.
 This way, it avoids copying everything upfront, saving memory and improving performance.
+In other words, when write operation happens, Redis copies the data that is being written to a new forked process, and the original memory location remains unchanged.
 It's like making a photocopy only when you need to change part of a document, instead of copying the whole thing from the start.
 
 
