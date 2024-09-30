@@ -6,6 +6,21 @@ There is no dedicated memory location for thread.
 It also has set of instructions but it shares the memory with its parent process.
 
 
+NGINX and Postgres is the example of Multi-Process. Multi-process means each process has its own memory location. Multi-process uses more energy.
+NodeJS is the example for Single Threaded Process.
+
+
+Copy-on-Write (CoW) in Redis is a memory optimization technique used during operations like forking (e.g., when Redis creates a snapshot for persistence using RDB files).
+Here's a simple way to understand it:
+When Redis forks a process to create a backup, it doesn't copy all the data immediately.
+Instead, both the original and the new process share the same memory pages.
+If the data in memory changes during this time, Redis makes a copy of the changed part and keeps the original unchanged for the snapshot process.
+This way, it avoids copying everything upfront, saving memory and improving performance.
+It's like making a photocopy only when you need to change part of a document, instead of copying the whole thing from the start.
+
+
+
+
 The main reason for having threads is that in many applications multiple activities are going on at once. Some of these may block from time to time.
 By decomposing such application into  multiple threads that run in quasi-parallels, programming becomes simpler. Threads share an address space and all of its data among themselves.
 The second reason for having threads is that they are lighter weight than processes, and because of it they are easier to create and destroy.
