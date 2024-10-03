@@ -1,5 +1,3 @@
-
-
 When in server we create a listener, the kernel of our server creates a socket & two queues: SYN and Accept. This queues lives in the kernel itself.
 
 
@@ -15,6 +13,7 @@ Connection is the instance of the socket. It is the file descriptor that is crea
 The socket is what we listen on, the connection is what we read/write on.
 
 You can have hundreds of connections to the same socket.
+
 
 
 
@@ -52,6 +51,10 @@ The backend application doesn't directly deal with SYN or ACK packets but intera
 
 
 
+
+
+
+
 A file descriptor created by kernel?
 Yes, the file descriptor (FD) is created by the kernel, not the application itself.
 
@@ -64,6 +67,9 @@ The kernel manages network sockets just like regular files, meaning every open s
 When the connection is established (after the TCP handshake), the kernel assigns a file descriptor to this new connection.
 The application can then use this file descriptor to send and receive data via system calls like read() and write() or through higher-level abstractions.
 So, the file descriptor itself is created and managed by the kernel as part of its role in managing resources like files and network connections.
+
+
+
 
 
 
