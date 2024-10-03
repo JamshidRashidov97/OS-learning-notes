@@ -8,10 +8,82 @@ Then Client replies with ACK,
 Kernel finds ACK that matches with the ACK that client sent. Then it removes the SYN from SYN queue to Accept queue.
 Then the backend application reads the SYN from Accept queue and creates a connection.
 Then file descriptor for connection is created.
-
+(The file descriptor is essentially an index to an entry in the kernel's file table, which keeps track of all open files, sockets, pipes, etc.)
 
 
 Connection is the instance of the socket. It is the file descriptor that is created when the connection is established.
 The socket is what we listen on, the connection is what we read/write on.
 
 You can have hundreds of connections to the same socket.
+
+
+
+
+
+When client sends a Syn message  ---->
+1) SYN packet is sent by the client.
+The client's SYN packet reaches the NIC (Network Interface Controller) of the server.
+
+2) NIC processes the Ethernet frame:
+The NIC checks the destination MAC address. If it matches the NIC’s MAC address, the frame is passed up to the kernel for further processing.
+
+3) Kernel processes the IP layer:
+The kernel checks the destination IP address. If the IP matches the server's IP address, it processes the packet further.
+
+4) TCP layer (Transport layer) processes the SYN packet:
+The kernel's TCP stack recognizes the packet as a SYN (TCP connection request).
+If there's a listening socket bound to the target port, the kernel adds the connection to the SYN queue (also called the backlog queue).
+
+5) TCP three-way handshake:
+The server responds with a SYN-ACK, and when the client sends an ACK back, the connection is established.
+
+6) Connection is moved to the Accept queue:
+Once the handshake is complete, the connection is moved from the SYN queue to the Accept queue (also called the established connection queue).
+
+7) Backend application accepts the connection:
+The backend application (which is listening for connections) calls accept() to retrieve a connection from the Accept queue.
+A file descriptor (FD) is created for the accepted connection, allowing the application to read and write data over this connection.
+
+
+Key corrections:
+SYN queue and Accept queue (backlog queue and established queue) are part of the kernel's TCP stack, not separate entities sending packets to each other.
+The backend application doesn't directly deal with SYN or ACK packets but interacts with the connection after it's fully established via the file descriptor.
+
+
+
+
+A file descriptor created by kernel?
+Yes, the file descriptor (FD) is created by the kernel, not the application itself.
+
+When the backend application calls accept() (after a successful three-way handshake for the TCP connection), the kernel creates a new file descriptor that represents the newly established connection.
+The file descriptor is essentially an index to an entry in the kernel's file table, which keeps track of all open files, sockets, pipes, etc.
+
+Here’s how it works:
+
+The kernel manages network sockets just like regular files, meaning every open socket is associated with a file descriptor.
+When the connection is established (after the TCP handshake), the kernel assigns a file descriptor to this new connection.
+The application can then use this file descriptor to send and receive data via system calls like read() and write() or through higher-level abstractions.
+So, the file descriptor itself is created and managed by the kernel as part of its role in managing resources like files and network connections.
+
+
+
+How Node.js uses file descriptors?
+Node.js does use file descriptors, but it abstracts them away for most developers.
+Under the hood, Node.js relies on the libuv library, which provides an asynchronous I/O framework and is responsible for interacting with the operating system to handle tasks like file system access,
+network communication, and timers.
+
+How Node.js Uses File Descriptors:
+File I/O:
+
+When you interact with the file system (e.g., using fs.open(), fs.readFile(), fs.write()), Node.js uses file descriptors behind the scenes.
+For instance, when you call fs.open(), the underlying system call (like open() in Linux) returns a file descriptor, which Node.js uses to read from or write to the file.
+Node.js abstracts this file descriptor into a file handle so that you don’t have to deal with the raw numbers.
+Network Sockets:
+
+For network connections (e.g., using net.createServer()), the server or client sockets are also tied to file descriptors. The operating system assigns a file descriptor for each socket that is opened.
+Node.js, through libuv, uses these file descriptors to manage the socket connection.
+When a new TCP connection is established, the kernel creates a file descriptor for it, and Node.js interacts with it through its event-driven, non-blocking I/O system.
+Pipes and IPC (Inter-Process Communication):
+
+When working with child processes (child_process.fork() or child_process.spawn()), Node.js can use file descriptors to manage pipes between the parent and child processes.
+The pipes themselves are represented by file descriptors in the operating system.
