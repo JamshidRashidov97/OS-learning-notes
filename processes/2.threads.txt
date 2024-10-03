@@ -3,10 +3,10 @@
 
 Thread is light weight process(LWP). It is just a process that inherits memory form it's parent.
 There is no dedicated memory location for thread.
-It also has set of instructions but it shares the memory with its parent process.
+It also has a set of instructions, but it shares the memory with its parent process.
 
 
-NGINX and Postgres is the example of Multi-Process. Multi-process means each process has its own memory location. Multi-process uses more energy.
+NGINX and Postgres are the example of Multi-Process. Multi-process means each process has its own memory location. Multi-process uses more energy.
 NodeJS is the example for Single Threaded Process.
 
 
@@ -24,8 +24,9 @@ It's like making a photocopy only when you need to change part of a document, in
 
 
 
-The main reason for having threads is that in many applications multiple activities are going on at once. Some of these may block from time to time.
-By decomposing such application into  multiple threads that run in quasi-parallels, programming becomes simpler. Threads share an address space and all of its data among themselves.
+The main reason for having threads is that in many applications, multiple activities are going on at once. Some of these may block from time to time.
+By decomposing such application into multiple threads that run in quasi-parallels, programming becomes simpler.
+Threads share an address space and all of its data among themselves.
 The second reason for having threads is that they are lighter weight than processes, and because of it they are easier to create and destroy.
 The third reason for having threads is also a performance argument. We cannot benefit from threads when all of them are CPU bound,
 but when there is substantial computing and also substantial I/O, having threads allows these activities to overlap, thus speeding up the application.
@@ -49,8 +50,8 @@ Thread has:
     * registers - hold its current working variables
     * stack - contains the execution history, with one frame for each procedure called but not yet returned from
 
-Process are used to group resources together. Threads are the entities scheduled for execution on the CPU.
-Threads have same states as processes: running, blocked, ready
+The Process is used to group resources together. Threads are the entities scheduled for execution on the CPU.
+Threads have the same states as processes: running, blocked, ready
 All threads have exactly the same address space.
 
 Threads share:
