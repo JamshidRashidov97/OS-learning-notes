@@ -1,0 +1,17 @@
+
+
+When in server we create a listener, the kernel of our server creates a socket & two queues: SYN and Accept. This queues lives in the kernel itself.
+
+
+When client sends a Syn message  ----> Kernel adds that SYN to SYN queue. Then replies with SYN/ACK.
+Then Client replies with ACK,
+Kernel finds ACK that matches with the ACK that client sent. Then it removes the SYN from SYN queue to Accept queue.
+Then the backend application reads the SYN from Accept queue and creates a connection.
+Then file descriptor for connection is created.
+
+
+
+Connection is the instance of the socket. It is the file descriptor that is created when the connection is established.
+The socket is what we listen on, the connection is what we read/write on.
+
+You can have hundreds of connections to the same socket.
