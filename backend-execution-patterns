@@ -100,3 +100,19 @@ The pipes themselves are represented by file descriptors in the operating system
 
 
 TLS is done by backend, not OS. OS only provides the socket. The backend application is responsible for handling the TLS handshake and encryption/decryption of data.
+
+
+
+So what's the problem with reading and sending?
+If the backend doesn't read fast enough, the receive buffer is going to be full,
+and if the receive buffer is full, the kernel cannot accept more data. So the client is going to suffer.
+The client, they're going to send all these data and the kernel in the backend is not reading fast enough.
+In other words, the kernel in the backend is not putting this data into the buffer. It just says, hey, I don't have space. Just drop it.
+So it will drop the packet altogether because there is no memory.
+As the memory allocated by the kernel for us in the kernel.
+So receive queue is full and the clients will slow down because of that.
+
+
+
+
+Learn sliding window concept in TCP. How it is used to control the flow of data between sender and receiver?
