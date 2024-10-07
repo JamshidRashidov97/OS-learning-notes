@@ -93,3 +93,10 @@ Pipes and IPC (Inter-Process Communication):
 
 When working with child processes (child_process.fork() or child_process.spawn()), Node.js can use file descriptors to manage pipes between the parent and child processes.
 The pipes themselves are represented by file descriptors in the operating system.
+
+
+
+
+
+
+TLS is done by backend, not OS. OS only provides the socket. The backend application is responsible for handling the TLS handshake and encryption/decryption of data.
