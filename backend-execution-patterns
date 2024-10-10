@@ -115,4 +115,13 @@ So receive queue is full and the clients will slow down because of that.
 
 
 
+//Todo
 Learn sliding window concept in TCP. How it is used to control the flow of data between sender and receiver?
+
+
+
+
+
+Multiple listeners on the same port.
+Socket sharding (SO_REUSEPORT) is a technique that allows multiple processes to bind to the same port on the same IP address.
+So you shard the socket in multiple processes.
