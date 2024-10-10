@@ -122,6 +122,68 @@ Learn sliding window concept in TCP. How it is used to control the flow of data 
 
 
 
+
+
+QUICK for OS is just UDP.
+
+
+
+
+
+Now let's take examples of backend architectures.
+
+We need to define:
+- Listener: The thread/process that calls `listen`, passing the port and address, and gets back the socket ID.
+- Acceptor: The entity that calls `accept` on the socket ID to get file descriptors for connections.
+- Reader: The entity that reads the connection.
+
+A single backend process can handle all three roles, but responsibilities can be separated:
+- One listener
+- Multiple acceptors
+- Multiple readers
+
+This is where multithreading and multiple processes come into play. Let's see how popular applications handle this.
+
+
+Single Listener, Acceptor and Reader Thread Execution Pattern
+- A single thread handles listening, accepting, and reading connections.
+- Example: A simple HTTP server in Python using the `socket` library.
+- How it works: The server creates a single thread that listens for incoming connections.
+When a connection is received, the same thread accepts the connection and reads data from it.
+This pattern is simple but can become a bottleneck under high load since one thread handles all tasks.
+
+
+Single Listener, Acceptor and Multiple Readers Thread Execution Pattern
+- One thread listens and accepts connections, while multiple threads read data.
+- Example: A web server in Java using the `ExecutorService` to handle multiple threads.
+- How it works: The server has a single thread that listens for and accepts connections.
+Once a connection is accepted, it is handed off to one of several reader threads that handle the data processing.
+This pattern improves performance by distributing the workload of reading data across multiple threads.
+
+
+Single Listener, Acceptor, Reader with Message Load Balancing Execution Pattern
+- One thread listens, accepts, and reads, then distributes messages to worker threads.
+- Example: A chat server in Node.js using the `cluster` module to distribute messages.
+- How it works: A single thread listens for, accepts, and reads incoming connections.
+After reading the data, it distributes the messages to a pool of worker threads for further processing.
+This pattern helps balance the load and ensures that message processing is handled efficiently.
+
+
+Multiple Accepter Threads on a Single Socket Execution Pattern
+- Multiple threads accept connections on the same socket.
+- Example: A high-traffic server in C using the `pthread` library to handle incoming connections.
+- How it works: The server creates multiple threads that all listen on the same socket.
+When a connection request arrives, any of the threads can accept it.
+This pattern allows the server to handle a high number of incoming connections simultaneously, improving performance under heavy load.
+
+
+Multiple Listeners, Acceptors and Readers with Socket Sharding Execution Pattern
+- Multiple threads or processes listen, accept, and read on different sockets (sharded).
+- Example: A load-balanced server in Go using the `net` package with multiple goroutines.
+- How it works: The server uses multiple threads or processes, each with its own socket, to listen for, accept, and read connections.
+This technique, known as socket sharding, distributes the incoming connections across multiple sockets, reducing contention and improving scalability.
+
+
 Multiple listeners on the same port.
 Socket sharding (SO_REUSEPORT) is a technique that allows multiple processes to bind to the same port on the same IP address.
 So you shard the socket in multiple processes.
