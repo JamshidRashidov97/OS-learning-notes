@@ -205,3 +205,19 @@ So, the client might display a message asking you to try again. If you click "Pa
 This new request will go through the same process and reach the backend. The backend will process it as a new payment request.
 This can lead to multiple payments being processed for the same transaction.
 
+
+How do I implement idempotency?
+The easiest implementation is to attach a unique request ID to each request, usually a UUID.
+
+1. Attach a unique request ID to each request.
+2. Execute the request on the backend.
+3. Check if the request ID has already been processed:
+    - If it has, exit.
+    - If it hasn't, process the request.
+
+This method can be a bit expensive because it requires a lookup in a table to check if the request ID has already been processed.
+
+You can do it in a smarter way using an upsert. An upsert is a style of execution where you try to insert, and if it exists, you update.
+By implementing everything as an upsert, you can effectively make your backend idempotent.
+
+There are various tricks you can use, but the key is to have a unique identifier to ensure that whatever you just did is actually completed or not.
