@@ -187,3 +187,21 @@ This technique, known as socket sharding, distributes the incoming connections a
 Multiple listeners on the same port.
 Socket sharding (SO_REUSEPORT) is a technique that allows multiple processes to bind to the same port on the same IP address.
 So you shard the socket in multiple processes.
+
+
+
+
+
+
+
+
+Idempotency:
+Idempotency is the idea of having a request to be repeatable without changing the state on the backend and not making any troubles.
+
+
+Imagine you're making a payment online and you click the "Pay" button. If the client times out, you might not know if the payment went through.
+The request was actually sent to the server and processed, but the client didn't receive a confirmation.
+So, the client might display a message asking you to try again. If you click "Pay" again, a new request will be sent.
+This new request will go through the same process and reach the backend. The backend will process it as a new payment request.
+This can lead to multiple payments being processed for the same transaction.
+
