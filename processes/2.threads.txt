@@ -41,6 +41,13 @@ Finite-state machine - Parallelism, nonblocking system calls, interrupts
 
 
 
+When do you use threads:
+
+1) IO blocking
+2) Heavy CPU bound
+3) Large volume of small tasks
+
+
 
 
 --- Thread model ---
