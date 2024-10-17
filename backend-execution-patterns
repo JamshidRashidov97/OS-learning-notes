@@ -229,3 +229,6 @@ Proxy vs Reverse Proxy:
 A proxy server is when a client knows about destination server. But server doesn't know about the client.
 In reverse proxy, client doesn't know about the destination server. It just knows about the proxy server. This proxy server forwards the request to the destination server and sends the response back to the client.
 
+
+As a client we have to configure a proxy. But as a client we don't have to configure a reverse proxy.
+Proxy operates on layer 4 and above.
