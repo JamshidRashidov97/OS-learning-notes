@@ -221,3 +221,11 @@ You can do it in a smarter way using an upsert. An upsert is a style of executio
 By implementing everything as an upsert, you can effectively make your backend idempotent.
 
 There are various tricks you can use, but the key is to have a unique identifier to ensure that whatever you just did is actually completed or not.
+
+
+
+
+Proxy vs Reverse Proxy:
+A proxy server is when a client knows about destination server. But server doesn't know about the client.
+In reverse proxy, client doesn't know about the destination server. It just knows about the proxy server. This proxy server forwards the request to the destination server and sends the response back to the client.
+
